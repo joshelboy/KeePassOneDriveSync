@@ -200,3 +200,6 @@ ModelManifest.xml
 
 # Mac
 .DS_Store
+
+# Build Files
+*.plgx
