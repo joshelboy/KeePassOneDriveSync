@@ -125,6 +125,16 @@ namespace KoenZomersKeePassOneDriveSync
             }
             catch (Exception e)
             {
+                // DEBUG: Show the actual error
+                System.Windows.Forms.MessageBox.Show(
+                    string.Format("Authentication Error:\n\nType: {0}\n\nMessage: {1}\n\nStackTrace: {2}",
+                        e.GetType().ToString(),
+                        e.Message,
+                        e.StackTrace),
+                    "Debug - GetOneDriveApi Error",
+                    System.Windows.Forms.MessageBoxButtons.OK,
+                    System.Windows.Forms.MessageBoxIcon.Error);
+
                 // If specifically the HttpRequestException occurred, it likely contains more information on what went wrong, so pass it up to the callstack
                 if (e.GetType().ToString() == "System.Net.Http.HttpRequestException")
                 {

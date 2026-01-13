@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>KoenZomersKeePassOneDriveSync</RootNamespace>
     <AssemblyName>KoenZomersKeePassOneDriveSync</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -39,7 +39,7 @@
       <HintPath>.\CredentialManagement.dll</HintPath>
     </Reference>
     <Reference Include="KeePass">
-      <HintPath>..\..\..\..\Program Files\KeePass Password Safe 2\KeePass.exe</HintPath>
+      <HintPath>C:\Program Files\KeePass Password Safe 2\KeePass.exe</HintPath>
     </Reference>
     <Reference Include="KoenZomers.OneDrive.Api, Version=2.3.0.3, Culture=neutral, PublicKeyToken=c94340d84666bdcb, processorArchitecture=MSIL">
       <HintPath>Packages\KoenZomers.OneDrive.Api.2.3.0.3\lib\net452\KoenZomers.OneDrive.Api.dll</HintPath>
@@ -163,6 +163,7 @@
     <Compile Include="Providers\MicrosoftGraph\MicrosoftGraphDeviceCodeAuthCheckFailedResponse.cs" />
     <Compile Include="Providers\MicrosoftGraph\MicrosoftGraphDeviceCodeResponse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Providers\GraphApiHelper.cs" />
     <Compile Include="Providers\OneDriveProvider.cs" />
     <Compile Include="Providers\SharePointProvider.cs" />
     <Compile Include="Resources.Designer.cs">
@@ -247,11 +248,4 @@
   <PropertyGroup>
     <PostBuildEvent>REM $(SolutionDir)create-plgx.cmd</PostBuildEvent>
   </PropertyGroup>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

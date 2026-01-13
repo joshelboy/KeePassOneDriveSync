@@ -146,9 +146,82 @@ namespace KoenZomersKeePassOneDriveSync.Forms
 
             if (parentItem == null)
             {
-                // Get the root of the shared with me items
-                var itemCollection = await _oneDriveApi.GetSharedWithMe();
-                var sortedItemCollection = itemCollection.Collection.OrderBy(i => i.Name).OrderBy(i => i.Folder == null).OrderBy(i => i.RemoteItem.Folder == null);
+                // Load shared items using Graph when available; fallback to legacy sharedWithMe if needed
+                var allItems = new System.Collections.Generic.List<OneDriveItem>();
+
+                // 1. SharedWithMe API
+                OneDriveItemCollection sharedItems = null;
+                try
+                {
+                    sharedItems = await Providers.GraphApiHelper.GetSharedWithMeItems(_oneDriveApi);
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine("SharedWithMe (Graph) Error: " + ex.Message);
+                    try
+                    {
+                        sharedItems = await _oneDriveApi.GetSharedWithMe();
+                    }
+                    catch (Exception fallbackEx)
+                    {
+                        System.Diagnostics.Debug.WriteLine("SharedWithMe fallback Error: " + fallbackEx.Message);
+                    }
+                }
+
+                if (sharedItems != null && sharedItems.Collection != null)
+                {
+                    allItems.AddRange(sharedItems.Collection);
+                }
+
+                // 2. Following API (fallback for items user "follows" in OneDrive web)
+                if (allItems.Count == 0)
+                {
+                    try
+                    {
+                        var followingItems = await Providers.GraphApiHelper.GetFollowingItems(_oneDriveApi);
+                        if (followingItems != null && followingItems.Collection != null)
+                        {
+                            // Only add items not already in the list (deduplicate by ID)
+                            foreach (var item in followingItems.Collection)
+                            {
+                                var itemId = item.Id;
+                                if (item.RemoteItem != null)
+                                {
+                                    itemId = item.RemoteItem.Id;
+                                }
+
+                                bool alreadyExists = false;
+                                foreach (var existing in allItems)
+                                {
+                                    var existingId = existing.Id;
+                                    if (existing.RemoteItem != null)
+                                    {
+                                        existingId = existing.RemoteItem.Id;
+                                    }
+                                    if (existingId == itemId)
+                                    {
+                                        alreadyExists = true;
+                                        break;
+                                    }
+                                }
+
+                                if (!alreadyExists)
+                                {
+                                    allItems.Add(item);
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        System.Diagnostics.Debug.WriteLine("Following API Error: " + ex.Message);
+                    }
+                }
+
+                // Create OneDriveItemCollection from merged results
+                var itemCollection = new OneDriveItemCollection { Collection = allItems.ToArray() };
+
+                var sortedItemCollection = itemCollection.Collection.OrderBy(i => i.Name).OrderBy(i => i.Folder == null).OrderBy(i => i.RemoteItem != null && i.RemoteItem.Folder == null);
                 SharedWithMeUpButton.Enabled = false;
                 CurrentSharedWithMeOneDriveItem = null;
                 GoToSharedWithMeRootTtoolStripMenuItem.Enabled = false;

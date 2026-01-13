@@ -197,3 +197,6 @@ ModelManifest.xml
 /.vs/KoenZomers.KeePass.OneDriveSync/v15/sqlite3/db.lock
 /.vs/KoenZomers.KeePass.OneDriveSync/v15/sqlite3/storage.ide-wal
 /.vs/KoenZomers.KeePass.OneDriveSync/v15/sqlite3/storage.ide-shm
+
+# Mac
+.DS_Store
