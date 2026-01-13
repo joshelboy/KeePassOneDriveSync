@@ -96,7 +96,7 @@
             this.WebsiteLinkLabel.Size = new System.Drawing.Size(398, 20);
             this.WebsiteLinkLabel.TabIndex = 9;
             this.WebsiteLinkLabel.TabStop = true;
-            this.WebsiteLinkLabel.Text = "https://github.com/joshelboy/KeePassOneDriveSync";
+            this.WebsiteLinkLabel.Text = "https://github.com/elias-tilegant/KeePassOneDriveSync";
             this.WebsiteLinkLabel.Click += new System.EventHandler(this.WebsiteLinkLabel_Click);
             // 
             // OneDriveAboutForm
